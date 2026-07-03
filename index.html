@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的个人主页</title>
+<style>
+/* ===== 全局变量 ===== */
+:root {
+  --primary: #1a56db;
+  --primary-dark: #1e40af;
+  --bg: #ffffff;
+  --bg-alt: #f8fafc;
+  --text: #1e293b;
+  --text-light: #64748b;
+  --border: #e2e8f0;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --radius: 12px;
+  --max-width: 960px;
+}
+
+/* ===== 基础重置 ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  color: var(--text);
+  line-height: 1.7;
+  background: var(--bg);
+}
+
+/* ===== 导航栏 ===== */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.navbar .inner {
+  max-width: var(--max-width); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px; height: 60px;
+}
+.navbar .logo { font-size: 22px; font-weight: 700; color: var(--primary); text-decoration: none; }
+.navbar .links { display: flex; gap: 28px; list-style: none; }
+.navbar .links a {
+  text-decoration: none; color: var(--text-light); font-size: 15px;
+  transition: color 0.2s;
+}
+.navbar .links a:hover { color: var(--primary); }
+
+/* ===== Hero 区 ===== */
+.hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 100px 24px 60px;
+  background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 50%, #eef2ff 100%);
+}
+.hero .avatar {
+  width: 120px; height: 120px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), #6366f1);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 28px;
+  font-size: 48px; color: #fff;
+  box-shadow: 0 8px 24px rgba(26,86,219,0.3);
+}
+.hero .avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.hero h1 { font-size: 42px; font-weight: 800; margin-bottom: 12px; letter-spacing: -1px; }
+.hero h1 span { color: var(--primary); }
+.hero .tagline { font-size: 20px; color: var(--text-light); max-width: 500px; margin: 0 auto; }
+.hero .cta { margin-top: 32px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.hero .cta a {
+  display: inline-block; padding: 12px 28px; border-radius: 8px;
+  font-size: 16px; font-weight: 600; text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.hero .cta a:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+.hero .cta .btn-primary { background: var(--primary); color: #fff; }
+.hero .cta .btn-outline { border: 2px solid var(--primary); color: var(--primary); }
+
+/* ===== 通用区块 ===== */
+.section { padding: 80px 24px; }
+.section:nth-child(even) { background: var(--bg-alt); }
+.section .inner { max-width: var(--max-width); margin: 0 auto; }
+.section .section-title { font-size: 30px; font-weight: 700; margin-bottom: 40px; text-align: center; }
+.section .section-title::after {
+  content: ""; display: block; width: 50px; height: 4px;
+  background: var(--primary); border-radius: 2px;
+  margin: 12px auto 0;
+}
+
+/* ===== 关于我 ===== */
+.about-grid { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: start; }
+.about-grid p { color: var(--text-light); font-size: 16px; }
+.skills { display: flex; flex-wrap: wrap; gap: 8px; }
+.skills .tag {
+  display: inline-block; padding: 6px 16px;
+  background: #eff6ff; color: var(--primary); border-radius: 20px;
+  font-size: 14px; font-weight: 500;
+}
+
+/* ===== 博客列表 ===== */
+.blog-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+.blog-card {
+  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 28px; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
+  border: 1px solid var(--border);
+}
+.blog-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.1); }
+.blog-card .date { font-size: 13px; color: var(--text-light); margin-bottom: 8px; }
+.blog-card h3 { font-size: 20px; margin-bottom: 8px; }
+.blog-card h3 a { color: inherit; text-decoration: none; }
+.blog-card h3 a:hover { color: var(--primary); }
+.blog-card p { color: var(--text-light); font-size: 15px; }
+.blog-card .tags { margin-top: 16px; display: flex; gap: 6px; flex-wrap: wrap; }
+.blog-card .tags span {
+  font-size: 12px; padding: 3px 10px;
+  background: var(--bg-alt); color: var(--text-light); border-radius: 12px;
+}
+
+/* ===== 联系 ===== */
+.contact-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+.contact-links a {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 24px; border: 1px solid var(--border); border-radius: var(--radius);
+  text-decoration: none; color: var(--text); transition: border-color 0.2s;
+}
+.contact-links a:hover { border-color: var(--primary); }
+.contact-links .icon { font-size: 22px; }
+
+/* ===== 留言板 ===== */
+.comment-form {
+  max-width: 600px; margin: 0 auto 40px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.comment-form input, .comment-form textarea {
+  width: 100%; padding: 12px 16px;
+  border: 1px solid var(--border); border-radius: 8px;
+  font-size: 15px; font-family: inherit;
+  transition: border-color 0.2s;
+}
+.comment-form input:focus, .comment-form textarea:focus {
+  outline: none; border-color: var(--primary);
+}
+.comment-form button {
+  align-self: flex-end; padding: 10px 28px;
+  background: var(--primary); color: #fff; border: none;
+  border-radius: 8px; font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: background 0.2s;
+}
+.comment-form button:hover { background: var(--primary-dark); }
+.comment-list {
+  max-width: 600px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.comment-item {
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px; text-align: left;
+}
+.comment-item .c-name {
+  font-weight: 700; font-size: 15px; margin-bottom: 4px; color: var(--primary);
+}
+.comment-item .c-time {
+  font-size: 12px; color: var(--text-light); margin-bottom: 8px;
+}
+.comment-item .c-msg {
+  font-size: 15px; color: var(--text); line-height: 1.6;
+}
+
+/* ===== 页脚 ===== */
+.footer {
+  text-align: center; padding: 32px 24px;
+  color: var(--text-light); font-size: 14px;
+  border-top: 1px solid var(--border);
+}
+
+/* ===== 回到顶部 ===== */
+#back-to-top {
+  position: fixed; bottom: 32px; right: 32px; z-index: 50;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--primary); color: #fff; border: none; cursor: pointer;
+  font-size: 20px; box-shadow: 0 4px 12px rgba(26,86,219,0.3);
+  opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s;
+}
+#back-to-top.show { opacity: 1; visibility: visible; }
+#back-to-top:hover { background: var(--primary-dark); }
+</style>
+</head>
+<body>
+
+<!-- 导航栏 -->
+<nav class="navbar">
+  <div class="inner">
+    <a href="#" class="logo">MyBlog-HaCHiMi</a>
+    <ul class="links">
+      <li><a href="#home">首页</a></li>
+      <li><a href="#about">关于</a></li>
+      <li><a href="#blog">博客</a></li>
+      <li><a href="#contact">联系</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="home">
+  <div>
+    <div class="avatar">
+      <img src="image/1.png" alt="头像">
+    </div>
+    <h1>曼波，我是 <span>Johnson</span></h1>
+    <p class="tagline">一个喜欢叮咚鸡大狗叫的哈基米学家<br>ドンゴチの鳴き声が好きなはちみ学者</p>
+    <div class="cta">
+      <a href="#blog" class="btn-primary">阅读博客</a>
+      <a href="#contact" class="btn-outline">联系我</a>
+    </div>
+  </div>
+</section>
+
+<!-- 关于我 -->
+<section class="section" id="about">
+  <div class="inner">
+    <h2 class="section-title">关于我</h2>
+    <div class="about-grid">
+      <div>
+        <p>作为一名野生哈基米学家，本人的研究领域极为垂直且硬核：专注解析
+          “はちみ”声波进入哺乳动物耳蜗后，引发头部高频点头运动的耦合机理，
+          同时跨界考察“听通知”这一人类被动技能在特定声场中畸变为“叮咚鸡”的
+          音变规律。在方法论上，我遵循“精神状态愈不稳定，实验数据愈真实”的
+          测不准原则，并坚信一切复杂的社会学现象最终都可归结为“大狗叫”（瞬时
+          爆发性情绪动力学）与“哈基米”（甜蜜且无厘头的熵增物质）之间的非线性博弈。</p>
+        <br>
+        <p>本博客的学术产出含金量固然不为百分百（约等于零），但学术气场必须
+          拉满至百分之两百。在我眼中，真正的学问不在于“写了什么”，而在于“叫
+          得多响，摇得多欢，以及叮咚之后，你究竟听懂了什么”。秉持“用最专业的
+          术语，讲最没用的废话”这一核心理念，我将持续在此记录这片荒诞又甜蜜的
+          赛博田野观察笔记——无关真理，只关共振。</p>
+      </div>
+      <div>
+        <h3 style="margin-bottom: 16px; font-size: 18px;">技能</h3>
+        <div class="skills">
+          <span class="tag">大狗叫</span>
+          <span class="tag">叮咚鸡</span>
+          <span class="tag">哈气</span>
+          <span class="tag">开脊背</span>
+          <span class="tag">老吴叫</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 博客 -->
+<section class="section" id="blog">
+  <div class="inner">
+    <h2 class="section-title">博客文章</h2>
+    <div class="blog-list">
+
+      <article class="blog-card">
+        <div class="date">2026 年 6 月 30 日</div>
+        <h3><a href="blog/hakimi.html">同一能指下的量子纠缠态——猫猫”哈基米”与球员阿什拉夫·哈基米的跨物种关联效应初探</a></h3>
+        <p>本文以“哈基米”这一共享能指为切入点，采用玄学符号学与网络民俗学交叉方法，对摇头猫咪与摩洛哥右后卫之间的超自然关联展开研究。
+          经七次严谨的对照组实验（含一次因猫咪拒绝配合而作废的无效数据），本文首次提出“哈基米共振假说”：当猫科动物头部摆动频率与球员
+          带球跑动步频达到某种神秘公约数时，时空将发生微小折叠，从而使两者在语义层面实现瞬时纠缠。本研究的学术价值在于，用一篇零信息
+          增量的论文，成功论证了“无关联即是最深层的关联”这一悖论性命题。
+        <div class="tags"><span>哈基米</span><span>量子萌动</span><span>能指寄生</span><span>玄学耦合</span></div>
+      </article>
+
+      <article class="blog-card">
+        <div class="date">2025 年 5 月 15 日</div>
+        <h3><a href="blog/article-2.html">圆头耄耋与哈基米王朝的建制化——一次模因突变事件的考古学考察</a></h3>
+        <p>本文以2024年9月“圆头耄耋”视频的走红为研究对象，考察该事件与“哈基米”网络模因之间的关联效应。研究发现，“
+          圆头耄耋”并非哈基米模因的起源，却构成了其从“萌宠指称”向“赛博神祇”跃迁的关键节点。该事件使哈基米从一首背景
+          音乐的附属标签，完成了去背景化与主体化的建制过程，正式登基为
+          “哈基米王朝”。然而，封神之后随之而来的“虐猫”争议，则揭示了互
+          联网模因建制化过程中的伦理裂隙——当一个空洞的能指被填充了具体
+          肉身之后，原本无关紧要的嬉笑便拥有了重量。本文的核心结论是：
+          圆头耄耋之于哈基米，恰如耶路撒冷之于基督教——它并非起点，却是
+          圣地。</p>
+        <div class="tags"><span>哈基米</span><span>圆头耄耋</span><span>能指肉身化</span><span>模因建制化</span></div>
+      </article>
+
+      <article class="blog-card">
+        <div class="date">2026 年 5 月 30 日</div>
+        <h3><a href="blog/article-3.html">模因行为与学业表现的相关性研究——基于大学生日常
+          模仿哈基米、大狗叫、叮咚鸡等网络模因的实证考察</a></h3>
+        <p>本文以某综合性大学在校本科生为研究对象，采用自编问卷与学业成
+          绩追踪相结合的方法，考察大学生日常模仿“哈基米”（摇头猫科动物
+          行为模拟）、“大狗叫”（突发性高声压发声行为）、“叮咚鸡”（被动
+          等待指令状态）等网络模因的行为频率，及其与学业成绩（GPA）、课
+          堂参与度、宿舍人际关系、早晚自习出勤率等指标之间的关联效应。
+          研究发现：模因模仿行为与学业表现之间呈现出一种非线性且高度显
+          著不相关的关系——即无论你一天摇几次头、叫几声大狗、叮咚多少次
+          ，你的绩点该多少还是多少。但值得注意的是，在“课堂随机大狗叫”
+          与“被辅导员约谈次数”之间，存在极其显著的强正相关（p<0.01）。
+          本文据此提出“模因安全行为边界”概念，为大学生网络亚文化参与提供
+          参考性建议。</p>
+        <div class="tags"><span>哈基米</span><span>大狗叫</span><span>叮咚鸡</span><span>学业表现</span><span>模因安全</span></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- 联系方式 -->
+<section class="section" id="contact">
+  <div class="inner">
+    <h2 class="section-title">联系我</h2>
+    <div class="contact-links">
+      <a href="mailto:2270441550@qq.com">
+        <span class="icon">📧</span> Email
+      </a>
+      <a href="https://github.com" target="_blank">
+        <span class="icon">🐙</span> GitHub
+      </a>
+      <a href="#" onclick="alert('微信号：Johnson_Jiangzz'); return false;">
+        <span class="icon">💬</span> 微信
+      </a>
+      <a href="tencent://message/?uin=2270441550" target="_blank">
+        <span class="icon">🐧</span> QQ
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 留言板 -->
+<section class="section" id="guestbook">
+  <div class="inner">
+    <h2 class="section-title">留言板</h2>
+    <div class="comment-form">
+      <input type="text" id="comment-name" placeholder="你的昵称" maxlength="30">
+      <textarea id="comment-msg" placeholder="说点什么……" rows="3" maxlength="500"></textarea>
+      <button id="comment-submit">提交留言</button>
+    </div>
+    <div class="comment-list" id="comment-list">
+      <!-- 留言会显示在这里 -->
+    </div>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer class="footer">
+  <p>&copy; 2026 MyBlog. Built with ❤️ and pure HTML/CSS.</p>
+</footer>
+
+<!-- 回到顶部按钮 -->
+<button id="back-to-top" title="回到顶部">↑</button>
+
+<script>
+// 回到顶部按钮显隐
+const btn = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 400) { btn.classList.add('show'); }
+  else { btn.classList.remove('show'); }
+});
+btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+// ===== 留言板 =====
+const STORAGE_KEY = 'myblog_comments';
+
+function loadComments() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  return raw ? JSON.parse(raw) : [];
+}
+
+function saveComments(comments) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
+}
+
+function renderComments() {
+  const list = document.getElementById('comment-list');
+  const comments = loadComments();
+  if (comments.length === 0) {
+    list.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:20px;">暂无留言，来说两句吧 👇</p>';
+    return;
+  }
+  list.innerHTML = comments.map(c => `
+    <div class="comment-item">
+      <div class="c-name">${escapeHtml(c.name)}</div>
+      <div class="c-time">${escapeHtml(c.time)}</div>
+      <div class="c-msg">${escapeHtml(c.msg)}</div>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+document.getElementById('comment-submit').addEventListener('click', () => {
+  const nameEl = document.getElementById('comment-name');
+  const msgEl = document.getElementById('comment-msg');
+  const name = nameEl.value.trim();
+  const msg = msgEl.value.trim();
+
+  if (!name) { alert('请填写昵称'); return; }
+  if (!msg) { alert('请填写留言内容'); return; }
+
+  const comments = loadComments();
+  const now = new Date();
+  const time = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  comments.unshift({ name, msg, time });
+  saveComments(comments);
+  renderComments();
+  nameEl.value = '';
+  msgEl.value = '';
+});
+
+// 页面加载时渲染留言
+renderComments();
+</script>
+
+</body>
+</html>
