@@ -330,14 +330,8 @@ body {
 <section class="section" id="guestbook">
   <div class="inner">
     <h2 class="section-title">留言板</h2>
-    <div class="comment-form">
-      <input type="text" id="comment-name" placeholder="你的昵称" maxlength="30">
-      <textarea id="comment-msg" placeholder="说点什么……" rows="3" maxlength="500"></textarea>
-      <button id="comment-submit">提交留言</button>
-    </div>
-    <div class="comment-list" id="comment-list">
-      <!-- 留言会显示在这里 -->
-    </div>
+    <!-- Giscus 评论区容器 -->
+    <div class="giscus"></div>
   </div>
 </section>
 
@@ -357,62 +351,23 @@ window.addEventListener('scroll', () => {
   else { btn.classList.remove('show'); }
 });
 btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
 
-// ===== 留言板 =====
-const STORAGE_KEY = 'myblog_comments';
-
-function loadComments() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  return raw ? JSON.parse(raw) : [];
-}
-
-function saveComments(comments) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
-}
-
-function renderComments() {
-  const list = document.getElementById('comment-list');
-  const comments = loadComments();
-  if (comments.length === 0) {
-    list.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:20px;">暂无留言，来说两句吧 👇</p>';
-    return;
-  }
-  list.innerHTML = comments.map(c => `
-    <div class="comment-item">
-      <div class="c-name">${escapeHtml(c.name)}</div>
-      <div class="c-time">${escapeHtml(c.time)}</div>
-      <div class="c-msg">${escapeHtml(c.msg)}</div>
-    </div>
-  `).join('');
-}
-
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-document.getElementById('comment-submit').addEventListener('click', () => {
-  const nameEl = document.getElementById('comment-name');
-  const msgEl = document.getElementById('comment-msg');
-  const name = nameEl.value.trim();
-  const msg = msgEl.value.trim();
-
-  if (!name) { alert('请填写昵称'); return; }
-  if (!msg) { alert('请填写留言内容'); return; }
-
-  const comments = loadComments();
-  const now = new Date();
-  const time = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-  comments.unshift({ name, msg, time });
-  saveComments(comments);
-  renderComments();
-  nameEl.value = '';
-  msgEl.value = '';
-});
-
-// 页面加载时渲染留言
-renderComments();
+<!-- Giscus 留言系统 -->
+<script src="https://giscus.app/client.js"
+        data-repo="JohnsonDirac/hachimi"
+        data-repo-id="R_kgDOTMdq5g"
+        data-category="General"
+        data-category-id="DIC_kwDOTMdq5s4DAazr"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
 </script>
 
 </body>
